@@ -38,26 +38,7 @@ public class RestauranteService {
         return mapFromRestauranteEntity(restaurante);
     }
 
-    private static RestauranteDTO mapFromRestauranteEntity(Restaurante restaurante) {
-        return new RestauranteDTO(
-                restaurante.getId(),
-                restaurante.getNome(),
-                restaurante.getTipoCozinha(),
-                restaurante.getHorarioAbertura(),
-                restaurante.getHorarioFechamento(),
-                restaurante.getGestor().getId(),
-                new EnderecoDTO(
-                        restaurante.getEndereco().getLogradouro(),
-                        restaurante.getEndereco().getNumero(),
-                        restaurante.getEndereco().getBairro(),
-                        restaurante.getEndereco().getCidade(),
-                        restaurante.getEndereco().getEstado(),
-                        restaurante.getEndereco().getCep()
-                )
-        );
-    }
-
-    public void saveRestaurante(RestauranteDTO restaurante) {
+    public RestauranteDTO saveRestaurante(RestauranteDTO restaurante) {
         var gestor = gestorRepository.findById(restaurante.idDonoRestaurante())
                 .orElseThrow(() -> new ResourceNotFoundException("Gestor não encontrado. ID: " + restaurante.idDonoRestaurante()));
 
@@ -80,6 +61,27 @@ public class RestauranteService {
         );
 
         this.restauranteRepository.save(restauranteEntity);
+
+        return mapFromRestauranteEntity(restauranteEntity);
+    }
+
+    private static RestauranteDTO mapFromRestauranteEntity(Restaurante restaurante) {
+        return new RestauranteDTO(
+                restaurante.getId(),
+                restaurante.getNome(),
+                restaurante.getTipoCozinha(),
+                restaurante.getHorarioAbertura(),
+                restaurante.getHorarioFechamento(),
+                restaurante.getGestor().getId(),
+                new EnderecoDTO(
+                        restaurante.getEndereco().getLogradouro(),
+                        restaurante.getEndereco().getNumero(),
+                        restaurante.getEndereco().getBairro(),
+                        restaurante.getEndereco().getCidade(),
+                        restaurante.getEndereco().getEstado(),
+                        restaurante.getEndereco().getCep()
+                )
+        );
     }
 
     public void updateRestaurante(Long id, RestauranteDTO restaurante) {
